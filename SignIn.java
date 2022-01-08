@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class SignIn implements ActionListener{
@@ -21,7 +22,7 @@ public class SignIn implements ActionListener{
 	private JTextField inputAccount;
 	public static String userAccount;
 	public static String userPassword;
-	private JTextField inputPassword;
+	private JPasswordField inputPassword;
 	User user;
 	SystemManager systemManager;
 	TestManager testManager;
@@ -29,52 +30,16 @@ public class SignIn implements ActionListener{
 	//宣告Connection物件
     Connection con;
     
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public void run() {
 		frame = new JFrame();	//create a frame 
 		frame.setTitle("評量系統KYUTES");		//sets title of frame 
 		frame.setSize(300,300);	//sets size of frame
-        frame.setLayout(new GridBagLayout());	//sets frame type
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	//exit out of application
-        frame.getContentPane().setBackground(Color.pink);	//change color of background
-        
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-            	//宣告Connection物件
-                Connection con;
-                //驅動程式名
-                String driver = "com.mysql.cj.jdbc.Driver";
-                //URL指向要訪問的資料庫名
-                String url = "jdbc:mysql://localhost:3306/software";
-                //MySQL配置時的使用者名稱
-                String user = "root";
-                //MySQL配置時的密碼
-                String sqlpassword = "jackywoo";
-                //遍歷查詢結果集
-                try {
-                    //載入驅動程式
-                    Class.forName(driver);
-                    //1.getConnection()方法，連線MySQL資料庫！！
-                    con = DriverManager.getConnection(url,user,sqlpassword);
-                    //2.建立statement類物件，用來執行SQL語句！！
-                    Statement statement = con.createStatement();
-                    //要執行的SQL語句
-                    String SqlUpadateSignIn="update `user` set `signin`='0' where account='" + userAccount +"'";
-		            //3.ResultSet類，用來存放獲取的結果集！！
-		            statement.executeUpdate(SqlUpadateSignIn);
-                } catch(ClassNotFoundException ex) {   
-                    //資料庫驅動類異常處理
-                    System.out.println("Sorry,can`t find the Driver!");   
-                    ex.printStackTrace();   
-                    } catch(SQLException ex) {
-                    //資料庫連線失敗異常處理
-                    ex.printStackTrace();  
-                    }catch (Exception ex) {
-                    // TODO: handle exception
-                    ex.printStackTrace();
-                }
-                frame.dispose();
-            }
-        });
+        frame.getContentPane().setLayout(new GridBagLayout());	//sets frame type
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	//exit out of application
+        frame.getContentPane().setBackground(new Color(0x0066CC));	//change color of background
         
         JLabel systemName = new JLabel("評量系統KYUTES");
         GridBagConstraints c0 = new GridBagConstraints();
@@ -86,7 +51,7 @@ public class SignIn implements ActionListener{
         c0.weighty = 0;
         c0.fill = GridBagConstraints.NONE;
         c0.anchor = GridBagConstraints.CENTER;
-        frame.add(systemName, c0);
+        frame.getContentPane().add(systemName, c0);
         
         JLabel account = new JLabel("帳號");
         GridBagConstraints c1 = new GridBagConstraints();
@@ -98,19 +63,19 @@ public class SignIn implements ActionListener{
         c1.weighty = 0;
         c1.fill = GridBagConstraints.BOTH;
         c1.anchor = GridBagConstraints.WEST;
-        frame.add(account, c1);
+        frame.getContentPane().add(account, c1);
         
         inputAccount = new JTextField();
         GridBagConstraints c2 = new GridBagConstraints();
         c2.gridx = 3;
         c2.gridy = 1;
-        c2.gridwidth = 4;
+        c2.gridwidth = 6;
         c2.gridheight = 1;
         c2.weightx = 0;
         c2.weighty = 0;
         c2.fill = GridBagConstraints.BOTH;
         c2.anchor = GridBagConstraints.WEST;
-        frame.add(inputAccount, c2);
+        frame.getContentPane().add(inputAccount, c2);
         
         JLabel password = new JLabel("密碼");
         GridBagConstraints c3 = new GridBagConstraints();
@@ -122,19 +87,19 @@ public class SignIn implements ActionListener{
         c3.weighty = 0;
         c3.fill = GridBagConstraints.BOTH;
         c3.anchor = GridBagConstraints.WEST;
-        frame.add(password, c3);
+        frame.getContentPane().add(password, c3);
         
-        inputPassword = new JTextField();
+        inputPassword = new JPasswordField();
         GridBagConstraints c4 = new GridBagConstraints();
         c4.gridx = 3;
         c4.gridy = 2;
-        c4.gridwidth = 4;
+        c4.gridwidth = 6;
         c4.gridheight = 1;
         c4.weightx = 0;
         c4.weighty = 0;
         c4.fill = GridBagConstraints.BOTH;
         c4.anchor = GridBagConstraints.WEST;
-        frame.add(inputPassword, c4);
+        frame.getContentPane().add(inputPassword, c4);
         
         SignIn = new JButton("登入");
         GridBagConstraints c5 = new GridBagConstraints();
@@ -146,7 +111,7 @@ public class SignIn implements ActionListener{
         c5.weighty = 0;
         c5.fill = GridBagConstraints.NONE;
         c5.anchor = GridBagConstraints.CENTER;
-        frame.add(SignIn, c5);
+        frame.getContentPane().add(SignIn, c5);
         SignIn.addActionListener(this);
         
         frame.setVisible(true);
@@ -216,20 +181,21 @@ public class SignIn implements ActionListener{
 					}
 	            	if(userAccount.charAt(0) == 'a' && sign == 1) {
 	            		JOptionPane.showMessageDialog(null, "此帳號已被登入", "錯誤訊息", JOptionPane.ERROR_MESSAGE); 
-	            		inputAccount.setText(" ");
-	            		inputPassword.setText(" ");
+	            		inputAccount.setText("");
+	            		userAccount = " ";
+	            		inputPassword.setText("");
 	            		count++;
 	            	}
 	            	else if(userAccount.charAt(0) == 'b' && sign == 1) {
 	            		JOptionPane.showMessageDialog(null, "此帳號已被登入", "錯誤訊息", JOptionPane.ERROR_MESSAGE); 
-	            		inputAccount.setText(" ");
-	            		inputPassword.setText(" ");
+	            		inputAccount.setText("");
+	            		inputPassword.setText("");
 	            		count++;
 	            	}
 	            	else if(userAccount.charAt(0) == 'c' && sign == 1) {
 	            		JOptionPane.showMessageDialog(null, "此帳號已被登入", "錯誤訊息", JOptionPane.ERROR_MESSAGE); 
-	            		inputAccount.setText(" ");
-	            		inputPassword.setText(" ");
+	            		inputAccount.setText("");
+	            		inputPassword.setText("");
 	            		count++;
 	            	}
 	            }
